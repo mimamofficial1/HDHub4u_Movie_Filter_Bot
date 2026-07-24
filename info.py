@@ -102,14 +102,14 @@ LOG_VR_CHANNEL = int(environ.get('LOG_VR_CHANNEL', '-1002399750144')) #Verificat
 LOG_API_CHANNEL = int(environ.get('LOG_API_CHANNEL', '-1002399750144')) #If Anyone Set Your Bot In Any Group And Set Shortner In That Group Then In This Channel The All Details Come
 VERIFY_IMG = environ.get("VERIFY_IMG", "https://files.catbox.moe/83oivt.jpg")
 
-TUTORIAL = environ.get("TUTORIAL", "https://t.me/MRN_Tutorial/1968")   # Tutorial link for 1st verification
-TUTORIAL_2 = environ.get("TUTORIAL_2", "https://t.me/MRN_Tutorial/1970")   # Tutorial link for 2nd verification
+TUTORIAL = environ.get("TUTORIAL", "https://t.me/MRN_Tutorial/1977")   # Tutorial link for 1st verification
+TUTORIAL_2 = environ.get("TUTORIAL_2", "https://t.me/MRN_Tutorial/1979")   # Tutorial link for 2nd verification
 
 # Verification (Must Fill All Variables. Else You Got Error)
-SHORTENER_API = environ.get("SHORTENER_API", "av_botz_MIrAZs9Re44n4exPOr16gsiYv04jX") # Shortener API key
+SHORTENER_API = environ.get("SHORTENER_API", "av_botz_hWbmF06W6Tzja560DOh13boecPLqD") # Shortener API key
 SHORTENER_WEBSITE = environ.get("SHORTENER_WEBSITE", "mrn-bypass-protect-bot-mrn-official.vercel.app") # Shortener website
 
-SHORTENER_API2 = environ.get("SHORTENER_API2", "av_botz_8QYjeJAZGKpeROxiBQvvGuUMjyNas")  # Shortener API key for second website
+SHORTENER_API2 = environ.get("SHORTENER_API2", "av_botz_DSHVK6nzn1jQU7kVL6FzcOqqvD4Vy")  # Shortener API key for second website
 SHORTENER_WEBSITE2 = environ.get("SHORTENER_WEBSITE2", "mrn-bypass-protect-bot-mrn-official.vercel.app") # Shortener website for second website
 
 TWO_VERIFY_GAP = int(environ.get('TWO_VERIFY_GAP', "43200"))  # 12 ghante = 43200 seconds (24 ghante mein 2 baar verify)
