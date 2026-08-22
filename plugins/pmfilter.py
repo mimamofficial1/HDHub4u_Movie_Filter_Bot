@@ -1716,7 +1716,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
             reply_markup=InlineKeyboardMarkup(group_list)
         )
 
-    elif query.data.startswith("setgs"):
+    elif query.data.startswith("setgs#"):
         ident, set_type, status, grp_id = query.data.split("#")
         userid = query.from_user.id if query.from_user else None
         if not await is_check_admin(client, int(grp_id), userid):
