@@ -275,7 +275,7 @@ async def start(client, message):
                     # BUG FIX: reply_markup was only defined inside the if block above
                     # causing NameError when "_" not in command
                     reply_markup = InlineKeyboardMarkup(btn)
-                    photo = random.choice(FSUB_PICS) if FSUB_PICS else "https://files.catbox.moe/fed7vg.jpg"
+                    photo = random.choice(FSUB_PICS) if FSUB_PICS else "https://files.catbox.moe/3ml4e3.jpg"
                     caption = script.FORCESUB_TXT.format(message.from_user.mention)
                     await message.reply_photo(
                         photo=photo,
