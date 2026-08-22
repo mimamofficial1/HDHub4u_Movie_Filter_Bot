@@ -504,13 +504,8 @@ async def get_shortlink(link, grp_id, is_second_shortener=False, is_third_shorte
     shortzy = Shortzy(api, site)
     try:
         link = await shortzy.convert(link)
-    except Exception:
-        try:
-            # BUG FIX: if convert fails, try get_quick_link
-            # if that also fails, return original link so user still gets file
-            link = await shortzy.get_quick_link(link)
-        except Exception:
-            pass  # return original link
+    except Exception as e:
+        link = await shortzy.get_quick_link(link)
     return link
 
 async def get_settings(group_id):
@@ -602,6 +597,9 @@ async def group_setting_buttons(grp_id):
             ],[
                 InlineKeyboardButton('ᴀᴜᴛᴏ ᴅᴇʟᴇᴛᴇ', callback_data=f'setgs#auto_delete#{settings["auto_delete"]}#{grp_id}',),
                 InlineKeyboardButton('✔ Oɴ' if settings["auto_delete"] else '✘ Oғғ', callback_data=f'setgs#auto_delete#{settings["auto_delete"]}#{grp_id}',),
+            ],[
+                InlineKeyboardButton('⏰ ᴅᴇʟᴇᴛᴇ ᴛɪᴍᴇ', callback_data=f'setgs_adt#{grp_id}#{settings.get("auto_delete_time", AUTO_DELETE_TIME) // 3600 or 1}',),
+                InlineKeyboardButton(f'{settings.get("auto_delete_time", AUTO_DELETE_TIME) // 3600 or 1} Hᴏᴜʀ', callback_data=f'setgs_adt#{grp_id}#{settings.get("auto_delete_time", AUTO_DELETE_TIME) // 3600 or 1}',),
             ],[
                 InlineKeyboardButton('ᴍᴀx ʙᴜᴛᴛᴏɴꜱ', callback_data=f'setgs#max_btn#{settings["max_btn"]}#{grp_id}',),
                 InlineKeyboardButton('10' if settings["max_btn"] else f'{MAX_B_TN}', callback_data=f'setgs#max_btn#{settings["max_btn"]}#{grp_id}',),

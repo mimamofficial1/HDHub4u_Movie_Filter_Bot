@@ -75,9 +75,9 @@ STAR_PREMIUM_PLANS = {
 # ============================
 # MongoDB Configuration
 # ============================
-DATABASE_URI = environ.get('DATABASE_URI', "mongodb+srv://camkittybaby:camkittybaby@cluster0.q59acds.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")  # MongoDB URI for the database
-DATABASE_NAME = environ.get('DATABASE_NAME', "Cluster0") # Database name (default: cluster)
-COLLECTION_NAME = environ.get('COLLECTION_NAME', 'camkittybaby') # Collection name (default: dreamcinezone_files)
+DATABASE_URI = environ.get('DATABASE_URI', "mongodb+srv://mimamofficialx:mimamofficialx@cluster0.b0sscce.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")  # MongoDB URI for the database
+DATABASE_NAME = environ.get('DATABASE_NAME', "mimamofficialx") # Database name (default: cluster)
+COLLECTION_NAME = environ.get('COLLECTION_NAME', 'SilentXBotz_files') # Collection name (default: dreamcinezone_files)
 
 # If MULTIPLE_DB Is True Then Fill DATABASE_URI2 Value Else You Will Get Error.
 MULTIPLE_DB = is_enabled(os.environ.get('MULTIPLE_DB', "False"), False) # Type True For Turn On MULTIPLE DB FUNTION 
@@ -137,6 +137,7 @@ MAX_B_TN = environ.get("MAX_B_TN", "5") # Maximum number of buttons in a row (de
 PORT = int(environ.get("PORT", "8080"))  # Port for the web server (default: 8080)
 MSG_ALRT = environ.get('MSG_ALRT', 'Share & Support Us ♥️') # Alert message for users
 DELETE_TIME = int(environ.get("DELETE_TIME", "300"))  #  deletion time in seconds (default: 5 minutes). Adjust as per your needs.
+AUTO_DELETE_TIME = int(environ.get("AUTO_DELETE_TIME", "3600"))  # default auto-delete time for group results in seconds (1 hour). Cycled between 1/2/3 hours from settings menu.
 CUSTOM_FILE_CAPTION = environ.get("CUSTOM_FILE_CAPTION", f"{script.CAPTION}")   # Custom caption for files
 BATCH_FILE_CAPTION = environ.get("BATCH_FILE_CAPTION", CUSTOM_FILE_CAPTION) # Custom caption for batch files
 IMDB_TEMPLATE = environ.get("IMDB_TEMPLATE", f"{script.IMDB_TEMPLATE_TXT}")     # Custom IMDB template 
@@ -210,7 +211,7 @@ else:
     ON_HEROKU = False
 BIND_ADRESS = str(getenv('WEB_SERVER_BIND_ADDRESS', '0.0.0.0'))
 FQDN = str(getenv('FQDN', BIND_ADRESS)) if not ON_HEROKU or getenv('FQDN') else APP_NAME+'.herokuapp.com'
-URL = "https://hdhub4u-movie-filter-bot.koyeb.app/".format(FQDN) if ON_HEROKU or NO_PORT else "https://hdhub4u-movie-filter-bot.koyeb.app/".format(FQDN, PORT)
+URL = "https://mrn-universe-filter-bot-stream.koyeb.app/".format(FQDN) if ON_HEROKU or NO_PORT else "https://mrn-universe-filter-bot-stream.koyeb.app/".format(FQDN, PORT)
 SLEEP_THRESHOLD = int(environ.get('SLEEP_THRESHOLD', '60'))
 WORKERS = int(environ.get('WORKERS', '4'))
 SESSION_NAME = str(environ.get('SESSION_NAME', 'Mrn_Officialx'))
@@ -224,9 +225,9 @@ else:
     ON_HEROKU = False
 HAS_SSL = bool(getenv('HAS_SSL', True))
 if HAS_SSL:
-    URL = "https://hdhub4u-movie-filter-bot.koyeb.app/".format(FQDN)
+    URL = "https://mrn-universe-filter-bot-stream.koyeb.app/".format(FQDN)
 else:
-    URL = "https://hdhub4u-movie-filter-bot.koyeb.app/".format(FQDN)
+    URL = "https://mrn-universe-filter-bot-stream.koyeb.app/".format(FQDN)
 
 # ============================
 # Reactions Configuration
