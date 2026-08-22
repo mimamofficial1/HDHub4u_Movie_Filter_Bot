@@ -150,6 +150,7 @@ class Database:
             'spell_check': SPELL_CHECK_REPLY,
             'welcome': MELCOW_NEW_USERS,
             'auto_delete': AUTO_DELETE,
+            'auto_delete_time': AUTO_DELETE_TIME,
             'auto_ffilter': AUTO_FFILTER,
             'max_btn': MAX_BTN,
             'template': IMDB_TEMPLATE,
@@ -217,10 +218,7 @@ class Database:
                 "last_verified": datetime.datetime(2020, 5, 17, 0, 0, 0, tzinfo=ist_timezone),
                 "second_time_verified": datetime.datetime(2019, 5, 17, 0, 0, 0, tzinfo=ist_timezone),
             }
-            await self.misc.insert_one(res)
-            # BUG FIX: insert_one returns InsertOneResult, not document
-            # So we must fetch the document after insert
-            user = await self.misc.find_one({"user_id": user_id})
+            user = await self.misc.insert_one(res)
         return user
 
     async def update_notcopy_user(self, user_id, value:dict):
@@ -261,23 +259,22 @@ class Database:
 
     async def use_second_shortener(self, user_id, time):
         user = await self.get_notcopy_user(user_id)
-        if not user or not user.get("second_time_verified"):
+        if not user.get("second_time_verified"):
             ist_timezone = pytz.timezone('Asia/Kolkata')
-            await self.update_notcopy_user(user_id, {"second_time_verified": datetime.datetime(2019, 5, 17, 0, 0, 0, tzinfo=ist_timezone)})
-            # BUG FIX: always re-fetch after update to get fresh data
-            user = await self.misc.find_one({"user_id": int(user_id)})
+            await self.update_notcopy_user(user_id, {"second_time_verified":datetime.datetime(2019, 5, 17, 0, 0, 0, tzinfo=ist_timezone)})
+            user = await self.get_notcopy_user(user_id)
         if await self.is_user_verified(user_id):
             try:
-                # BUG FIX: always fetch fresh user to avoid stale data
-                user = await self.misc.find_one({"user_id": int(user_id)})
                 pastDate = user["last_verified"]
             except Exception:
-                return False
+                user = await self.get_notcopy_user(user_id)
+                pastDate = user["last_verified"]
             ist_timezone = pytz.timezone('Asia/Kolkata')
             pastDate = pastDate.astimezone(ist_timezone)
             current_time = datetime.datetime.now(tz=ist_timezone)
             time_difference = current_time - pastDate
             if time_difference > datetime.timedelta(seconds=time):
+                pastDate = user["last_verified"].astimezone(ist_timezone)
                 second_time = user["second_time_verified"].astimezone(ist_timezone)
                 return second_time < pastDate
         return False
