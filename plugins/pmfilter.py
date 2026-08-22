@@ -1733,6 +1733,22 @@ async def cb_handler(client: Client, query: CallbackQuery):
             btn = await group_setting_buttons(int(grp_id))
             reply_markup = InlineKeyboardMarkup(btn)
             await query.message.edit_reply_markup(reply_markup)
+
+    elif query.data.startswith("setgs_adt"):
+        ident, grp_id, current_hr = query.data.split("#")
+        userid = query.from_user.id if query.from_user else None
+        if not await is_check_admin(client, int(grp_id), userid):
+            await query.answer(script.NT_ADMIN_ALRT_TXT, show_alert=True)
+            return
+        cycle = {1: 2, 2: 3, 3: 1}
+        new_hr = cycle.get(int(current_hr), 1)
+        await save_group_settings(int(grp_id), 'auto_delete_time', new_hr * 3600)
+        await query.answer(f"⏰ Aᴜᴛᴏ Dᴇʟᴇᴛᴇ Tɪᴍᴇ Sᴇᴛ ᴛᴏ {new_hr} Hᴏᴜʀ(s) ✅")
+        settings = await get_settings(int(grp_id))
+        if settings is not None:
+            btn = await group_setting_buttons(int(grp_id))
+            reply_markup = InlineKeyboardMarkup(btn)
+            await query.message.edit_reply_markup(reply_markup)
     await query.answer(MSG_ALRT)
 
 
@@ -1986,13 +2002,14 @@ async def auto_filter(client, msg, spoll=False):
             return
         try:
             if settings.get('auto_delete'):
-                asyncio.create_task(_schedule_delete(sent, message, DELETE_TIME))
+                del_delay = settings.get('auto_delete_time', AUTO_DELETE_TIME)
+                asyncio.create_task(_schedule_delete(sent, message, del_delay))
         except KeyError:
             try:
                 await save_group_settings(message.chat.id, 'auto_delete', True)
             except Exception:
                 pass
-            asyncio.create_task(_schedule_delete(sent, message, DELETE_TIME))
+            asyncio.create_task(_schedule_delete(sent, message, settings.get('auto_delete_time', AUTO_DELETE_TIME)))
         return
     except Exception as e:
         logger.exception(e)
