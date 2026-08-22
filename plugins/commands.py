@@ -75,7 +75,8 @@ async def start(client, message):
                 reply_markup=reply_markup,
                 parse_mode=enums.ParseMode.HTML
             )
-            await sticker.delete()
+            if sticker:
+                await sticker.delete()
             await asyncio.sleep(300)
             await dlt.delete()
             return         
@@ -87,7 +88,8 @@ async def start(client, message):
                       ]]
             reply_markup = InlineKeyboardMarkup(buttons)
             await message.reply(script.GSTART_TXT.format(message.from_user.mention if message.from_user else message.chat.title, temp.U_NAME, temp.B_NAME), reply_markup=reply_markup, disable_web_page_preview=True)
-            await sticker.delete()
+            if sticker:
+                await sticker.delete()
             await asyncio.sleep(2) 
             if not await db.get_chat(message.chat.id):
                 total=await client.get_chat_members_count(message.chat.id)
@@ -270,7 +272,9 @@ async def start(client, message):
                         btn.append([
                             InlineKeyboardButton("♻️ ᴛʀʏ ᴀɢᴀɪɴ ♻️", callback_data=f"checksub#{kk}#{file_id}")
                         ])
-                        reply_markup = InlineKeyboardMarkup(btn)
+                    # BUG FIX: reply_markup was only defined inside the if block above
+                    # causing NameError when "_" not in command
+                    reply_markup = InlineKeyboardMarkup(btn)
                     photo = random.choice(FSUB_PICS) if FSUB_PICS else "https://files.catbox.moe/fed7vg.jpg"
                     caption = script.FORCESUB_TXT.format(message.from_user.mention)
                     await message.reply_photo(
@@ -316,7 +320,8 @@ async def start(client, message):
                         reply_markup=reply_markup,
                         parse_mode=enums.ParseMode.HTML
                     )
-                    await sticker.delete()
+                    if sticker:
+                        await sticker.delete()
                     await asyncio.sleep(300) 
                     await n.delete()
                     await m.delete()
@@ -336,8 +341,9 @@ async def start(client, message):
                 filesarr = []
                 cover = None
                 for file in files:
-                    file_id = file.file_id
-                    files_ = await get_file_details(file_id)
+                    # BUG FIX: don't overwrite outer file_id variable
+                    each_file_id = file.file_id
+                    files_ = await get_file_details(each_file_id)
                     files1 = files_[0]
                     title = clean_filename(files1.file_name)
                     cover = files1.cover
@@ -353,18 +359,19 @@ async def start(client, message):
                             f_caption = f_caption
                     if f_caption is None:
                         f_caption = f"{clean_filename(files1.file_name)}"
-                    btn = await stream_buttons(message.from_user.id, file_id)
+                    btn = await stream_buttons(message.from_user.id, each_file_id)
                     msg = await client.send_cached_media(
                         chat_id=message.from_user.id,
                         cover=cover,
-                        file_id=file_id,
+                        file_id=each_file_id,
                         caption=f_caption,
                         protect_content=settings.get('file_secure', PROTECT_CONTENT),
                         reply_markup=InlineKeyboardMarkup(btn)
                     )
                     filesarr.append(msg)
                 k = await client.send_message(chat_id=message.from_user.id, text=script.DEL_MSG.format(get_time(DELETE_TIME)), parse_mode=enums.ParseMode.HTML)
-                await sticker.delete()
+                if sticker:
+                    await sticker.delete()
                 await asyncio.sleep(DELETE_TIME)
                 for x in filesarr:
                     await x.delete()
@@ -415,7 +422,8 @@ async def start(client, message):
                 k = await msg.reply(script.DEL_MSG.format(get_time(DELETE_TIME)),
                     quote=True, parse_mode=enums.ParseMode.HTML
                 )
-                await sticker.delete()
+                if sticker:
+                    await sticker.delete()
                 await asyncio.sleep(DELETE_TIME)
                 await msg.delete()
                 await k.edit_text("<b>ʏᴏᴜʀ ᴠɪᴅᴇᴏ / ꜰɪʟᴇ ɪꜱ ꜱᴜᴄᴄᴇꜱꜱꜰᴜʟʟʏ ᴅᴇʟᴇᴛᴇᴅ !!</b>")
@@ -454,7 +462,8 @@ async def start(client, message):
         k = await msg.reply(script.DEL_MSG.format(get_time(DELETE_TIME)),
             quote=True, parse_mode=enums.ParseMode.HTML
         )
-        await sticker.delete()
+        if sticker:
+            await sticker.delete()
         await asyncio.sleep(DELETE_TIME)
         await msg.delete()
         await k.edit_text("<b>ʏᴏᴜʀ ᴠɪᴅᴇᴏ / ꜰɪʟᴇ ɪꜱ ꜱᴜᴄᴄᴇꜱꜱꜰᴜʟʟʏ ᴅᴇʟᴇᴛᴇᴅ !!</b>")
