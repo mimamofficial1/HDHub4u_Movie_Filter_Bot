@@ -504,8 +504,13 @@ async def get_shortlink(link, grp_id, is_second_shortener=False, is_third_shorte
     shortzy = Shortzy(api, site)
     try:
         link = await shortzy.convert(link)
-    except Exception as e:
-        link = await shortzy.get_quick_link(link)
+    except Exception:
+        try:
+            # BUG FIX: if convert fails, try get_quick_link
+            # if that also fails, return original link so user still gets file
+            link = await shortzy.get_quick_link(link)
+        except Exception:
+            pass  # return original link
     return link
 
 async def get_settings(group_id):
